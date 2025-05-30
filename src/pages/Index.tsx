@@ -1,19 +1,27 @@
 
-import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { AgentDashboard } from "@/components/dashboard/AgentDashboard";
+import AdminDashboard from "./AdminDashboard";
+import { Loader2 } from "lucide-react";
 
 const Index = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<'agent' | 'admin'>('agent');
+  const { user, profile, loading } = useAuth();
 
-  const handleLogin = (role: 'agent' | 'admin') => {
-    setUserRole(role);
-    setIsAuthenticated(true);
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+      </div>
+    );
+  }
 
-  if (!isAuthenticated) {
-    return <LoginForm onLogin={handleLogin} />;
+  if (!user || !profile) {
+    return <LoginForm />;
+  }
+
+  if (profile.role === 'admin') {
+    return <AdminDashboard />;
   }
 
   return <AgentDashboard />;
