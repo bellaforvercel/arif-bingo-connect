@@ -52,7 +52,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 console.error('Error fetching profile:', error);
                 setProfile(null);
               } else {
-                setProfile(data);
+                // Type assertion to ensure the role is properly typed
+                const typedProfile: Profile = {
+                  ...data,
+                  role: data.role as 'admin' | 'agent',
+                  status: data.status as 'active' | 'inactive'
+                };
+                setProfile(typedProfile);
               }
             } catch (error) {
               console.error('Error in profile fetch:', error);
