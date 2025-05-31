@@ -13,6 +13,7 @@ const Index = () => {
     console.log('Index - User:', user?.id, 'Profile:', profile?.role, 'Loading:', loading);
   }, [user, profile, loading]);
 
+  // Show loading while checking auth state
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -24,15 +25,22 @@ const Index = () => {
     );
   }
 
+  // Show login if no user or profile
   if (!user || !profile) {
     return <LoginForm />;
   }
 
+  // Route based on role
   if (profile.role === 'admin') {
     return <AdminDashboard />;
   }
 
-  return <AgentDashboard />;
+  if (profile.role === 'agent') {
+    return <AgentDashboard />;
+  }
+
+  // Fallback - should not happen but just in case
+  return <LoginForm />;
 };
 
 export default Index;

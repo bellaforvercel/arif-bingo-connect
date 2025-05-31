@@ -14,18 +14,31 @@ export const LoginForm = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!credentials.email || !credentials.password) {
+      toast({
+        title: "Error",
+        description: "Please enter both email and password",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     
     try {
+      console.log('Attempting sign in for:', credentials.email);
       await signIn(credentials.email, credentials.password);
+      
       toast({
         title: "Success",
         description: "Signed in successfully!",
       });
     } catch (error: any) {
+      console.error('Sign in error:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to sign in",
+        description: error.message || "Failed to sign in. Please check your credentials.",
         variant: "destructive",
       });
     } finally {
@@ -53,6 +66,7 @@ export const LoginForm = () => {
                 onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
                 className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 required
+                autoComplete="email"
               />
             </div>
             <div>
@@ -63,6 +77,7 @@ export const LoginForm = () => {
                 onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
                 className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 required
+                autoComplete="current-password"
               />
             </div>
             <Button 
@@ -70,7 +85,14 @@ export const LoginForm = () => {
               className="w-full bg-orange-500 hover:bg-orange-600 text-white"
               disabled={loading}
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign In"}
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
         </CardContent>
