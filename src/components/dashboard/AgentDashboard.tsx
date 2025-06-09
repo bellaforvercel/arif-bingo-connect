@@ -15,7 +15,7 @@ export const AgentDashboard = () => {
   const [activeSection, setActiveSection] = useState<Section>('dashboard');
 
   if (!user || user.role !== 'agent') {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/auth\" replace />;
   }
 
   const renderContent = () => {
