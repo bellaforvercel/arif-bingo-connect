@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
@@ -12,10 +11,10 @@ import { Contest } from "@/components/dashboard/Contest";
 type Section = 'dashboard' | 'cards' | 'reports' | 'contract' | 'contest';
 
 export const AgentDashboard = () => {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [activeSection, setActiveSection] = useState<Section>('dashboard');
 
-  if (!user || !profile || profile.role !== 'agent') {
+  if (!user || user.role !== 'agent') {
     return <Navigate to="/auth" replace />;
   }
 
@@ -41,8 +40,8 @@ export const AgentDashboard = () => {
       <Sidebar 
         activeSection={activeSection} 
         onSectionChange={setActiveSection}
-        walletBalance={profile.wallet_balance}
-        userName={profile.full_name}
+        walletBalance={user.wallet_balance}
+        userName={user.full_name}
       />
       <main className="flex-1 p-6">
         {renderContent()}

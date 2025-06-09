@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/hooks/useAuth";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { AgentDashboard } from "@/components/dashboard/AgentDashboard";
@@ -7,15 +6,15 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 
 const Index = () => {
-  const { user, profile, loading } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     console.log('[Index] State update:', { 
       userId: user?.id, 
-      profileRole: profile?.role, 
+      userRole: user?.role, 
       loading 
     });
-  }, [user, profile, loading]);
+  }, [user, loading]);
 
   // Show loading while checking auth state
   if (loading) {
@@ -37,19 +36,13 @@ const Index = () => {
     return <LoginForm />;
   }
 
-  // Show login if no profile (this handles the case where profile fetch failed)
-  if (!profile) {
-    console.log('[Index] No profile found for user, showing login');
-    return <LoginForm />;
-  }
-
   // Route based on role
-  if (profile.role === 'admin') {
+  if (user.role === 'admin') {
     console.log('[Index] Routing to admin dashboard');
     return <AdminDashboard />;
   }
 
-  if (profile.role === 'agent') {
+  if (user.role === 'agent') {
     console.log('[Index] Routing to agent dashboard');
     return <AgentDashboard />;
   }

@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Users, DollarSign, GamepadIcon, Settings } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { user, profile, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
-  if (!user || !profile || profile.role !== 'admin') {
+  if (!user || user.role !== 'admin') {
     return <Navigate to="/auth" replace />;
   }
 
@@ -21,7 +20,7 @@ const AdminDashboard = () => {
             <p className="text-gray-300">Admin Portal</p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-gray-300">Welcome, {profile.full_name}</span>
+            <span className="text-gray-300">Welcome, {user.full_name}</span>
             <Button onClick={signOut} variant="outline">
               Sign Out
             </Button>
